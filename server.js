@@ -6,12 +6,13 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const axios = require('axios');
 const usastats = require('./usastats.js');
-const worldstats = require('./worldstats.js')
+const usahistorical = require('./usahistorical.js');
+const worldstats = require('./worldstats.js');
 app.use(cors());
 app.use(express.json());
 require('dotenv').config();
 
-//mongoose.connect('add mongoDB url here when we get it', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/covid-compass', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const PORT = process.env.PORT || 3001;
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/usastats', usastats);
+app.get('/usahistorical', usahistorical)
 
 app.get('/worldstats', worldstats);
 
