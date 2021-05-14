@@ -14,8 +14,29 @@ require('dotenv').config();
 
 mongoose.connect('mongodb://localhost:27017/covid-compass', { useNewUrlParser: true, useUnifiedTopology: true });
 
+const { User } = require('./models/User');
+
 const PORT = process.env.PORT || 3001;
 
+//const myUser = new User({
+  //userName: 'Michael',
+  //savedLocations: [{locationName: 'Mexico'}],
+  //userEmail: 'michael3hendricks@gmail.com',
+//});
+
+//myUser.save(function (err) {
+  //if(err) {
+    //console.log(err);
+  //} else {
+    //console.log('user saved');
+  //}
+//});
+
+app.get('/users', (req, res) => {
+  User.find((err, databaseResults) => {
+    res.send(databaseResults);
+  });
+})
 
 app.get('/', (req, res) => {
   res.send('hello, world');
