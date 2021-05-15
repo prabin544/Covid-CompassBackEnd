@@ -19,9 +19,9 @@ const { User } = require('./models/User');
 const PORT = process.env.PORT || 3001;
 
 //const myUser = new User({
-  //userName: 'Michael',
-  //savedLocations: [{locationName: 'Mexico'}],
+  //userName: 'David',
   //userEmail: 'michael3hendricks@gmail.com',
+  //savedLocations: [{locationName: 'Australia', locationCases: 30, locationRecovered: 50, locationDeaths: 90}],
 //});
 
 //myUser.save(function (err) {
