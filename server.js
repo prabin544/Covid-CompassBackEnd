@@ -47,6 +47,50 @@ app.get('/usahistorical', usahistorical)
 
 app.get('/worldstats', worldstats);
 
+app.post('/users', (req, res) => {
+  let user = req.query.user;
+  console.log(user);
+  User.find({ userEmail: user}, (err, userData) => {
+    if (userData.length < 1) {
+      res.send(400).send('user does not exist');
+    } else {
+      userData[0].savedLocations.push({
+        locationName: req.body.savedCountryName, locationCases: req.body.savedCountryConfirmed,
+        locationRecovered: req.body.savedCountryRecovered,
+        locationDeaths: req.body.savedCountryDeaths,
+
+      });
+      userData[0].save().then(() => {
+        User.find((err, databaseResults) => {
+          res.send(databaseResults);
+        });
+      })
+    }
+  })
+});
+
+app.get('/users/:id', (req, res) => {
+  let email = req.query.user;
+  User.find({ userEmail: email},(err, userData) => {
+    let user = userData[0];
+    user.savedLocations = user.savedLocations.filter(location => `${location.loationName}` !== req.params.id);
+    user.save().then(userData => {
+      res.send(userData.savedLocations);
+    });
+  });
+})
+
+app.delete('/users/:id', (req, res) => {
+  let email = req.query.user;
+  User.find({ userEmail: email},(err, userData) => {
+    let user = userData[0];
+    user.savedLocations = user.savedLocations.filter(location => `${location._id}` !== req.params.id);
+    user.save().then(userData => {
+      res.send(userData.savedLocations);
+    });
+  });
+})
+
 
 
 app.listen(PORT, () => console.log(`app is listening on port ${PORT}`));
