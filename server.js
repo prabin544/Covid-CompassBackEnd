@@ -49,12 +49,9 @@ app.get('/users', (req, res) => {
   });
 })
 
-app.get('/', (request, response) => {
-    // response.send('hello! from best-books backend');
-    User.find((err, userData) => {
-      response.send(userData);
-    });
-  });
+app.get('/', (req, res) => {
+  res.send('hello, world');
+});
 
 app.get('/usastats', usastats);
 app.get('/usahistorical', usahistorical)
