@@ -11,16 +11,20 @@ const worldstats = require('./worldstats.js');
 app.use(cors());
 app.use(express.json());
 require('dotenv').config();
+const connectDB = require('./config/db');
 
-mongoose.connect('mongodb://localhost:27017/covid-compass', { useNewUrlParser: true, useUnifiedTopology: true });
+connectDB()
+
+// mongoose.connect('mongodb://localhost:27017/covid-compass', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const { User } = require('./models/User');
+const TotalAmt = require('./models/TotalAmt')
 
 const PORT = process.env.PORT || 3001;
 
 const myUser = new User({
   userName: 'David',
-  userEmail: 'louislassegue@gmail.com',
+  userEmail: 'pravin544@gmail.com',
   savedLocations: [{locationName: 'Australia', locationCases: 30, locationRecovered: 50, locationDeaths: 90}],
 });
 
@@ -31,6 +35,13 @@ myUser.save(function (err) {
     console.log('user saved');
   }
 });
+
+const newTotalAmt = new TotalAmt({
+  name: 'Donation',
+  totalAmt: 123,
+})
+
+newTotalAmt.save();
 
 app.get('/users', (req, res) => {
   User.find((err, databaseResults) => {
@@ -88,6 +99,28 @@ app.delete('/users/:id', (req, res) => {
     });
   });
 })
+
+app.post('/amt', (req, res) => {
+  console.log(req.body);
+  TotalAmt.update(
+    { name: "Donation" },
+    { $inc: { totalAmt: req.body.amt } }
+    ).then(userData => {
+      res.send("Amt Updated");
+  });
+});
+
+app.get('/amt', (request, response) => {
+TotalAmt.find({name: "Donation"}, (err, totalAmt) => {
+  if(err) return console.error(err);
+  if (totalAmt && totalAmt.length > 0){
+    response.status(200).send((totalAmt[0].totalAmt).toString());
+  } else {
+    response.status(400).send('user does not exist');
+  }
+  
+})
+});
 
 
 
