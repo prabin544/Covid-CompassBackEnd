@@ -2,7 +2,7 @@
 
 ## Cooperation Plan
 
-What are the key strengths of each person on the team?
+Whatare the key strengths of each person on the team?
 
  - Louis: strengths are JavaScript frontend and debugging 
  - Prabin: strengths  are JavaScript frontend and backend 
