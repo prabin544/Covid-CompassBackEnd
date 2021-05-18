@@ -18,19 +18,19 @@ const { User } = require('./models/User');
 
 const PORT = process.env.PORT || 3001;
 
-//const myUser = new User({
-  //userName: 'David',
-  //userEmail: 'michael3hendricks@gmail.com',
-  //savedLocations: [{locationName: 'Australia', locationCases: 30, locationRecovered: 50, locationDeaths: 90}],
-//});
+const myUser = new User({
+  userName: 'David',
+  userEmail: 'louislassegue@gmail.com',
+  savedLocations: [{locationName: 'Australia', locationCases: 30, locationRecovered: 50, locationDeaths: 90}],
+});
 
-//myUser.save(function (err) {
-  //if(err) {
-    //console.log(err);
-  //} else {
-    //console.log('user saved');
-  //}
-//});
+myUser.save(function (err) {
+  if(err) {
+    console.log(err);
+  } else {
+    console.log('user saved');
+  }
+});
 
 app.get('/users', (req, res) => {
   User.find((err, databaseResults) => {
@@ -52,7 +52,7 @@ app.post('/users', (req, res) => {
   console.log(user);
   User.find({ userEmail: user}, (err, userData) => {
     if (userData.length < 1) {
-      res.send(400).send('user does not exist');
+      res.status(400).send('user does not exist');
     } else {
       userData[0].savedLocations.push({
         locationName: req.body.savedCountryName, locationCases: req.body.savedCountryConfirmed,
@@ -60,10 +60,8 @@ app.post('/users', (req, res) => {
         locationDeaths: req.body.savedCountryDeaths,
 
       });
-      userData[0].save().then(() => {
-        User.find((err, databaseResults) => {
-          res.send(databaseResults);
-        });
+      userData[0].save().then((databaseResults) => {
+          res.send([databaseResults]);
       })
     }
   })
