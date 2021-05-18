@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3001;
 
 const myUser = new User({
   userName: 'David',
-  userEmail: 'pravin544@gmail.com',
+  userEmail: 'michael3hendricks@gmail.com',
   savedLocations: [{locationName: 'Australia', locationCases: 30, locationRecovered: 50, locationDeaths: 90}],
 });
 
