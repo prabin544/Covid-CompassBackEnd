@@ -63,7 +63,15 @@ app.post('/users', (req, res) => {
   console.log(user);
   User.find({ userEmail: user}, (err, userData) => {
     if (userData.length < 1) {
-      res.status(400).send('user does not exist');
+      let newUser = new Users({
+        email: req.body.email,
+        savedLocations: [
+          {locationName: req.body.savedCountryName,locationCases: req.body.savedCountryConfirmed,locationRecovered:req.body.savedCountryRecovered,locationDeaths:req.body.savedCountryDeaths}
+        ]
+      });
+      newUser.save().then(newUserData => {
+        res.send(newUserData.savedLocations);
+      });
     } else {
       userData[0].savedLocations.push({
         locationName: req.body.savedCountryName, locationCases: req.body.savedCountryConfirmed,
