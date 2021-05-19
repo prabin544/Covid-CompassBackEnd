@@ -49,21 +49,21 @@ app.get('/users', (req, res) => {
 })
 
 app.get('/users/:email', (req, res) => {
-  User.find({userEmail: req.query.user}, (err, userData) => {
+  console.log(req.params.email)
+  User.find({userEmail: req.params.email}, (err, userData) => {
+    
     if(userData.length < 1) {
       // create the user!
-      let newUser = new User({userEmail: req.query.user});
+      let newUser = new User({userEmail: req.params.email});
       newUser.save().then(newUserData => {
         console.log(userData)
         res.send([newUserData]);
       });
     } else {
-      
       res.send(userData);
     }
   });
 });
-
 
 app.get('/', (req, res) => {
   res.send('hello, world');
