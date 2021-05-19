@@ -11,7 +11,6 @@ const locationSchema = new Schema({
 
 
 const userSchema = new Schema ({
-  userName: String,
   savedLocations: [locationSchema],
   userEmail: String
 });

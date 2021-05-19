@@ -22,13 +22,12 @@ const TotalAmt = require('./models/TotalAmt')
 
 const PORT = process.env.PORT || 3001;
 
-const myUser = new User({
-  userName: 'David',
+const newUser = new User({
   userEmail: 'michael3hendricks@gmail.com',
   savedLocations: [{locationName: 'Australia', locationCases: 30, locationRecovered: 50, locationDeaths: 90}],
 });
 
-myUser.save(function (err) {
+newUser.save(function (err) {
   if(err) {
     console.log(err);
   } else {
@@ -44,10 +43,27 @@ const newTotalAmt = new TotalAmt({
 newTotalAmt.save();
 
 app.get('/users', (req, res) => {
-  User.find((err, databaseResults) => {
-    res.send(databaseResults);
+  User.find((err, newUserData) => {
+    res.send(newUserData);
   });
 })
+
+app.get('/users/:email', (req, res) => {
+  User.find({userEmail: req.query.user}, (err, userData) => {
+    if(userData.length < 1) {
+      // create the user!
+      let newUser = new User({userEmail: req.query.user});
+      newUser.save().then(newUserData => {
+        console.log(userData)
+        res.send([newUserData]);
+      });
+    } else {
+      
+      res.send(userData);
+    }
+  });
+});
+
 
 app.get('/', (req, res) => {
   res.send('hello, world');
@@ -58,29 +74,32 @@ app.get('/usahistorical', usahistorical)
 
 app.get('/worldstats', worldstats);
 
+
 app.post('/users', (req, res) => {
   let user = req.query.user;
   console.log(user);
   User.find({ userEmail: user}, (err, userData) => {
     if (userData.length < 1) {
-      let newUser = new Users({
-        email: req.body.email,
+      let newUser = new User({
+        userEmail: req.query.user,
         savedLocations: [
           {locationName: req.body.savedCountryName,locationCases: req.body.savedCountryConfirmed,locationRecovered:req.body.savedCountryRecovered,locationDeaths:req.body.savedCountryDeaths}
         ]
       });
       newUser.save().then(newUserData => {
-        res.send(newUserData.savedLocations);
+        res.send([newUserData]);
       });
     } else {
-      userData[0].savedLocations.push({
-        locationName: req.body.savedCountryName, locationCases: req.body.savedCountryConfirmed,
+      let user = userData[0];
+      user.savedLocations.push({
+        locationName: req.body.savedCountryName,
+        locationCases: req.body.savedCountryConfirmed,
         locationRecovered: req.body.savedCountryRecovered,
         locationDeaths: req.body.savedCountryDeaths,
 
       });
-      userData[0].save().then((databaseResults) => {
-          res.send([databaseResults]);
+      user.save().then((newUserData) => {
+          res.send([newUserData]);
       })
     }
   })
