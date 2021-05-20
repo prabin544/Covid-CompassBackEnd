@@ -27,3 +27,6 @@ Prabin Singh, Louis Lassegue, Michael Hendricks
 React, Node, Axios, Mongoose, MongoDB
 
 ## Links 
+
+[Link to frontend Code](https://github.com/prabin544/Covid-CompassFrontEnd)
+[Link to heroku](https://covid-compassbackend.herokuapp.com/)
