@@ -22,18 +22,7 @@ const TotalAmt = require('./models/TotalAmt')
 
 const PORT = process.env.PORT || 3001;
 
-const newUser = new User({
-  userEmail: 'michael3hendricks@gmail.com',
-  savedLocations: [{locationName: 'Australia', locationCases: 30, locationRecovered: 50, locationDeaths: 90}],
-});
-
-newUser.save(function (err) {
-  if(err) {
-    console.log(err);
-  } else {
-    console.log('user saved');
-  }
-});
+// hopefully you don't need this code anymore
 
 const newTotalAmt = new TotalAmt({
   name: 'Donation',
@@ -42,6 +31,7 @@ const newTotalAmt = new TotalAmt({
 
 newTotalAmt.save();
 
+// this means that I can make a request to get all the data on all the users in your database... that's probably not what you want
 app.get('/users', (req, res) => {
   User.find((err, newUserData) => {
     res.send(newUserData);
@@ -69,6 +59,7 @@ app.get('/', (req, res) => {
   res.send('hello, world');
 });
 
+// weird that this is partially modularized but partially not
 app.get('/usastats', usastats);
 app.get('/usahistorical', usahistorical)
 
